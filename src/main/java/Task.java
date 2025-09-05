@@ -22,7 +22,7 @@ public class Task {
         this.isMarked = marked;
     }
 
-    public String MarkedBox() {
+    public String markedBox() {
         if (isMarked) {
             return "[X] ";
         } else {

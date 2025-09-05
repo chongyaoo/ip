@@ -1,8 +1,9 @@
 public class Event extends Task {
-    private String dates;
+    private String date;
 
-    public Event (String data) {
+    public Event (String data, String date) {
         super(data);
+        this.date = date;
         this.isMarked = false;
     }
 

@@ -1,8 +1,9 @@
-public class Deadline extends Task{
+public class Deadline extends Task {
     private String date;
 
-    public Deadline (String data) {
+    public Deadline(String data, String date) {
         super(data);
+        this.date = date;
         this.isMarked = false;
     }
 
