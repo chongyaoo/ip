@@ -18,6 +18,14 @@ public class Grizzly {
 
     private static void handleMark(Task[] storedItems, int index, String[] parts) {
         int itemToMark;
+        if (parts.length > 2) {
+            System.out.println("Too many arguments!");
+            return;
+        }
+        if (parts.length == 1) {
+            System.out.println("Please input the index of the Task to mark!");
+            return;
+        }
         try {
             itemToMark = Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
@@ -35,6 +43,14 @@ public class Grizzly {
 
     private static void handleUnmark(Task[] storedItems, int index, String[] parts) {
         int itemToUnmark;
+        if (parts.length > 2) {
+            System.out.println("Too many arguments!");
+            return;
+        }
+        if (parts.length == 1) {
+            System.out.println("Please input the index of the Task to mark!");
+            return;
+        }
         try {
             itemToUnmark = Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
@@ -45,9 +61,9 @@ public class Grizzly {
             storedItems[itemToUnmark - 1].setMarked(false);
             System.out.println("OK, I've marked this task as not done yet:");
             System.out.println(itemToUnmark + "." + storedItems[itemToUnmark - 1].toType() + storedItems[itemToUnmark - 1].markedBox() + storedItems[itemToUnmark - 1].toString());
-        } else {
-            System.out.println("Task " + itemToUnmark + " has not been created!");
+            return;
         }
+        System.out.println("Task " + itemToUnmark + " has not been created!");
     }
 
     private static void handleList(Task[] storedItems, int index) {
@@ -57,16 +73,24 @@ public class Grizzly {
         }
     }
 
-    private static void handleToDo(Task[] storedItems, int index, String[] parts) {
+    private static void handleToDo(Task[] storedItems, int index, String[] parts) throws IllegalArgumentException {
+        if (parts.length <= 1) {
+            System.out.println("Description for ToDo cannot be empty!");
+            throw new IllegalArgumentException();
+        }
         ToDo todoTask = new ToDo(parts[1]);
         storedItems[index - 1] = todoTask;
         System.out.println("Got it. I've added this task:");
         System.out.println(todoTask.toType() + todoTask.markedBox() + todoTask.toString());
         System.out.println("Now you have " + index + " tasks in the list");
-        index++;
     }
 
-    private static void handleDeadline(Task[] storedItems, int index, String[] parts) {
+
+    private static void handleDeadline(Task[] storedItems, int index, String[] parts) throws IllegalArgumentException {
+        if (parts.length <= 1) {
+            System.out.println("Description for Deadline cannot be empty!");
+            throw new IllegalArgumentException();
+        }
         String[] words = parts[1].split("\\s+");
         int byIndex = -1;
         int i = 0;
@@ -77,6 +101,14 @@ public class Grizzly {
             i++;
         }
         if (byIndex != -1) {
+            if (byIndex == 0) { //no event input
+                System.out.println("Please input a deadline event!");
+                throw new IllegalArgumentException();
+            }
+            if (byIndex == words.length - 1) {
+                System.out.println("Please input the deadline!");
+                throw new IllegalArgumentException();
+            }
             StringBuilder eventBuilder = new StringBuilder();
             for (int j = 0; j < byIndex; j++) {
                 eventBuilder.append(words[j]);
@@ -96,13 +128,17 @@ public class Grizzly {
             System.out.println("Got it. I've added this task:");
             System.out.println(deadlineTask.toType() + deadlineTask.markedBox() + deadlineTask.toString());
             System.out.println("Now you have " + index + " tasks in the list");
-            index++;
             return;
         }
-        System.out.println("Please input date");
+        System.out.println("Please include keyword '/by'");
+        throw new IllegalArgumentException();
     }
 
-    private static void handleEvent(Task[] storedItems, int index, String[] parts) {
+    private static void handleEvent(Task[] storedItems, int index, String[] parts) throws IllegalArgumentException {
+        if (parts.length <= 1) {
+            System.out.println("Description for Event cannot be empty!");
+            throw new IllegalArgumentException();
+        }
         String[] words1 = parts[1].split("\\s+");
         int fromIndex = -1;
         int j = 0;
@@ -113,6 +149,14 @@ public class Grizzly {
             j++;
         }
         if (fromIndex != -1) {
+            if (fromIndex == 0) { //no event input
+                System.out.println("Please input an event!");
+                throw new IllegalArgumentException();
+            }
+            if (fromIndex == words1.length - 1) {
+                System.out.println("Please input the timing of the event!");
+                throw new IllegalArgumentException();
+            }
             StringBuilder eventBuilder = new StringBuilder();
             for (int a = 0; a < fromIndex; a++) {
                 eventBuilder.append(words1[a]);
@@ -132,10 +176,10 @@ public class Grizzly {
             System.out.println("Got it. I've added this task:");
             System.out.println(eventTask.toType() + eventTask.markedBox() + eventTask.toString());
             System.out.println("Now you have " + index + " tasks in the list");
-            index++;
             return;
         }
-        System.out.println("Please input date");
+        System.out.println("Please include keyword '/from'");
+        throw new IllegalArgumentException();
     }
 
     public static void main(String[] args) {
@@ -163,15 +207,31 @@ public class Grizzly {
                     handleList(storedItems, index);
                     break;
                 case "todo":
-                    handleToDo(storedItems, index, parts);
+                    try {
+                        handleToDo(storedItems, index, parts);
+                        index++; //index needs to be incremented outside of function
+                    } catch (IllegalArgumentException e) {
+                        break; //no increment of index
+                    }
                     break;
                 case "deadline":
-                    handleDeadline(storedItems, index, parts);
+                    try {
+                        handleDeadline(storedItems, index, parts);
+                        index++; //index needs to be incremented outside of function
+                    } catch (IllegalArgumentException e) {
+                        break; //no increment of index
+                    }
                     break;
                 case "event":
-                    handleEvent(storedItems, index, parts);
+                    try {
+                        handleEvent(storedItems, index, parts);
+                        index++; //index needs to be incremented outside of function
+                    } catch (IllegalArgumentException e) {
+                        break; //no increment of index
+                    }
+                    break;
                 default:
-                    System.out.println("Not a valid command");
+                    System.out.println("Sorry, I do not understand that command."); //not valid command
                     break;
             }
             line = in.nextLine();

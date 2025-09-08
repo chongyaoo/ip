@@ -1,9 +1,7 @@
 public class ToDo extends Task {
-    private String date;
 
     public ToDo(String data) {
         super(data);
-        this.date = date;
         this.isMarked = false;
     }
 
@@ -13,6 +11,6 @@ public class ToDo extends Task {
     }
 
     public String toString() {
-        return super.toString() + " (by: " + date + ")";
+        return super.toString();
     }
 }
