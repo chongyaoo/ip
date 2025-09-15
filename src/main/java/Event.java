@@ -11,4 +11,8 @@ public class Event extends Task {
     public String toType() {
         return "[E]";
     }
+
+    public String toString() {
+        return super.toString() + " (from: " + date + ")";
+    }
 }

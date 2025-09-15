@@ -1,8 +1,8 @@
 public class ToDo extends Task {
 
-
-    public ToDo (String data) {
+    public ToDo(String data) {
         super(data);
+        this.isMarked = false;
     }
 
     @Override
@@ -10,4 +10,7 @@ public class ToDo extends Task {
         return "[T]";
     }
 
+    public String toString() {
+        return super.toString();
+    }
 }
