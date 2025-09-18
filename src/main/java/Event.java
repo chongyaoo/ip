@@ -1,10 +1,10 @@
 public class Event extends Task {
     private String date;
 
-    public Event (String data, String date) {
+    public Event (String data, String date, boolean marked) {
         super(data);
         this.date = date;
-        this.isMarked = false;
+        this.isMarked = marked;
     }
 
     @Override

@@ -1,11 +1,11 @@
 public class ToDo extends Task {
 
-    public ToDo(String data) {
+    public ToDo(String data, boolean marked) {
         super(data);
-        this.isMarked = false;
+        this.isMarked = marked;
     }
 
-    @Override
+        @Override
     public String toType() {
         return "[T]";
     }

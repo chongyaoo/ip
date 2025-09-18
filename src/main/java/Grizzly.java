@@ -1,6 +1,84 @@
 import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public class Grizzly {
+    private static final String FILE_PATH = "src/main/lines.txt";
+
+    private static void printFileContents() throws FileNotFoundException {
+        File f = new File(FILE_PATH); // create a File for the given file path
+        Scanner s = new Scanner(f); // create a Scanner using the File as the source
+        int k = 1;
+        while (s.hasNext()) {
+            System.out.println(k + "." + s.nextLine());
+            k++;
+        }
+    }
+
+    private static Task stringtoTask(String line) {
+        char taskType = line.charAt(1);
+        char marked = line.charAt(4);
+        boolean isMarked = (marked == 'X');
+        String task = line.substring(7);
+        Task taskToReturn = new Task();
+        switch (taskType) {
+            case 'T': //Todo type
+                taskToReturn = new ToDo(task, isMarked);
+                break;
+            case 'D': //deadline type
+                int startDIndex = line.indexOf('(');
+                int endDIndex = line.indexOf(')');
+                String deadlineString = line.substring(7, startDIndex - 1);
+                String dDate = line.substring(startDIndex + 5, endDIndex);
+                taskToReturn = new Deadline(deadlineString, dDate, isMarked);
+                break;
+            case 'E': //event type
+                int startEIndex = line.indexOf('(');
+                int endEIndex = line.indexOf(')');
+                String eventString = line.substring(7, startEIndex - 1);
+                String eDate = line.substring(startEIndex + 7, endEIndex);
+                taskToReturn = new Event(eventString, eDate, isMarked);
+                break;
+        }
+        return taskToReturn;
+    }
+
+    private static int recordFileContents(List<Task> storedItems) throws FileNotFoundException {
+        File f = new File(FILE_PATH); // create a File for the given file path
+        Scanner s = new Scanner(f); // create a Scanner using the File as the source
+        int k = 1;
+        while (s.hasNext()) {
+            storedItems.add(stringtoTask(s.nextLine()));
+            k++;
+        }
+        return k;
+    }
+
+
+    private static void appendToFile(String textToAppend) throws IOException {
+        File f = new File(FILE_PATH);
+        FileWriter fw = new FileWriter(FILE_PATH, true); // create a FileWriter in append mode
+        if (f.length() == 0) { //checking if the contents is empty
+            fw.write(textToAppend);
+            fw.close();
+            return;
+        }
+        fw.write(System.lineSeparator() + textToAppend);
+        fw.close();
+    }
+
+    private static void writeToFile(List<Task> storedItems) throws IOException {
+        FileWriter fw = new FileWriter(FILE_PATH);
+        for (int i = 0; i < storedItems.size(); i++) {
+            fw.write((i == 0 ? "" : System.lineSeparator()) + storedItems.get(i).toType() + storedItems.get(i).markedBox() + storedItems.get(i).toString());
+        }
+        fw.close();
+    }
+
     private static void caseBye() {
         String logo = """
                 Bye. Hope to see you again soon!
@@ -36,6 +114,11 @@ public class Grizzly {
             storedItems.get(itemToMark - 1).setMarked(true);
             System.out.println("Nice! I've marked this task as done:");
             System.out.println(itemToMark + "." + storedItems.get(itemToMark - 1).toType() + storedItems.get(itemToMark - 1).markedBox() + storedItems.get(itemToMark - 1).toString());
+            try {
+                writeToFile(storedItems);
+            } catch (IOException e) {
+                System.out.println("Something went wrong: " + e.getMessage());
+            }
             return;
         }
         System.out.println("Task " + itemToMark + " has not been created!");
@@ -61,6 +144,11 @@ public class Grizzly {
             storedItems.get(itemToUnmark - 1).setMarked(false);
             System.out.println("OK, I've marked this task as not done yet:");
             System.out.println(itemToUnmark + "." + storedItems.get(itemToUnmark - 1).toType() + storedItems.get(itemToUnmark - 1).markedBox() + storedItems.get(itemToUnmark - 1).toString());
+            try {
+                writeToFile(storedItems);
+            } catch (IOException e) {
+                System.out.println("Something went wrong: " + e.getMessage());
+            }
             return;
         }
         System.out.println("Task " + itemToUnmark + " has not been created!");
@@ -78,11 +166,16 @@ public class Grizzly {
             System.out.println("Description for ToDo cannot be empty!");
             throw new IllegalArgumentException();
         }
-        ToDo todoTask = new ToDo(parts[1]);
+        ToDo todoTask = new ToDo(parts[1], false);
         storedItems.add(index - 1, todoTask);
         System.out.println("Got it. I've added this task:");
         System.out.println(todoTask.toType() + todoTask.markedBox() + todoTask.toString());
         System.out.println("Now you have " + index + " tasks in the list");
+        try {
+            appendToFile(todoTask.toType() + todoTask.markedBox() + todoTask.toString());
+        } catch (IOException e) {
+            System.out.println("Something went wrong: " + e.getMessage());
+        }
     }
 
 
@@ -114,6 +207,11 @@ public class Grizzly {
             System.out.println("Got it. I've added this task:");
             System.out.println(deadlineTask.toType() + deadlineTask.markedBox() + deadlineTask.toString());
             System.out.println("Now you have " + index + " tasks in the list");
+            try {
+                appendToFile(deadlineTask.toType() + deadlineTask.markedBox() + deadlineTask.toString());
+            } catch (IOException e) {
+                System.out.println("Something went wrong: " + e.getMessage());
+            }
             return;
         }
         System.out.println("Please include keyword '/by'");
@@ -135,7 +233,7 @@ public class Grizzly {
         date = date.substring(0, date.length() - 1); //removing the last space
         String event = eventBuilder.toString();
         event = event.substring(0, event.length() - 1); //removing the last space
-        return new Deadline(event, date);
+        return new Deadline(event, date, false);
     }
 
     private static void handleEvent(List<Task> storedItems, int index, String[] parts) throws IllegalArgumentException {
@@ -166,6 +264,11 @@ public class Grizzly {
             System.out.println("Got it. I've added this task:");
             System.out.println(eventTask.toType() + eventTask.markedBox() + eventTask.toString());
             System.out.println("Now you have " + index + " tasks in the list");
+            try {
+                appendToFile(eventTask.toType() + eventTask.markedBox() + eventTask.toString());
+            } catch (IOException e) {
+                System.out.println("Something went wrong: " + e.getMessage());
+            }
             return;
         }
         System.out.println("Please include keyword '/from'");
@@ -187,7 +290,7 @@ public class Grizzly {
         from = from.substring(0, from.length() - 1); //removing the last space
         String event = eventBuilder.toString();
         event = event.substring(0, event.length() - 1); //removing the last space
-        return new Event(event, from);
+        return new Event(event, from, false);
     }
 
     private static void handleDelete(List<Task> storedItems, int index, String[] parts) throws IllegalArgumentException {
@@ -211,6 +314,11 @@ public class Grizzly {
             storedItems.remove(itemToDelete - 1);
             System.out.println("I've deleted this item from the list:");
             System.out.println(deletedTask.toType() + deletedTask.markedBox() + deletedTask.toString());
+            try {
+                writeToFile(storedItems);
+            } catch (IOException e) {
+                System.out.println("Something went wrong: " + e.getMessage());
+            }
             return;
         }
         System.out.println("Task " + itemToDelete + " has not been created!");
@@ -223,6 +331,12 @@ public class Grizzly {
         String line;
         int index = 1;
         List<Task> storedItems = new ArrayList<>();
+        try {
+            index = recordFileContents(storedItems);
+        } catch (FileNotFoundException e) {
+            System.out.println("Textfile not found!");
+            return;
+        }
         line = in.nextLine();
 
         while (true) {
@@ -272,6 +386,13 @@ public class Grizzly {
                         index++; //index needs to be incremented outside of function
                     } catch (IllegalArgumentException e) {
                         break; //no increment of index
+                    }
+                    break;
+                case "print":
+                    try {
+                        printFileContents();
+                    } catch (IOException e) {
+                        System.out.println("Something went wrong: " + e.getMessage());
                     }
                     break;
                 default:
