@@ -11,14 +11,13 @@ public class Grizzly {
 
     public static void main(String[] args) {
         TaskList taskList = new TaskList();
-        Parser parser = new Parser();
         Ui.handleGreeting(); //start with greeting
         taskList.attemptInitialFileLoad();
         Scanner in = new Scanner(System.in);
         String line = in.nextLine();
 
         while (true) {
-            String[] parts = parser.parseInput(line);
+            String[] parts = Parser.parseInput(line);
             switch (parts[0]) {
                 case "delete":
                     try {
@@ -61,6 +60,9 @@ public class Grizzly {
                     break;
                 case "print":
                     Storage.attemptPrintFileContents();
+                    break;
+                case "find":
+                    taskList.handleFind(parts);
                     break;
                 default:
                     Ui.printInvalidCommand();

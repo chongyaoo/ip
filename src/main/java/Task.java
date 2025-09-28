@@ -7,15 +7,10 @@ public class Task {
         this.isMarked = false;
     }
 
-    public Task() {
-    }
+    public Task() {}
 
-    public String getString() {
+    public String getDescription() {
         return data;
-    }
-
-    public boolean isMarked() {
-        return isMarked;
     }
 
     public void setMarked(boolean marked) {

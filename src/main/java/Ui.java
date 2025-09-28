@@ -27,13 +27,20 @@ public class Ui {
         System.out.println(logo);
     }
 
-    public static void printTask(Task eventTask, int index) {
+    public static void printTask(Task task, int index) {
         System.out.println("Got it. I've added this task:");
-        System.out.println(eventTask.toType() + eventTask.markedBox() + eventTask.toString());
+        System.out.println(task.toType() + task.markedBox() + task.toString());
         System.out.println("Now you have " + index + " tasks in the list");
     }
 
-    public static void printError (Exception e) {
+    public static void printFindHeader() {
+        System.out.println("Here are the matching tasks in your list");
+    }
+    public static void printIndivTask (Task task, int index) {
+        System.out.println(index + ". " + task.toType() + task.markedBox() + task.toString());
+    }
+
+    public static void printError(Exception e) {
         System.out.println("Something went wrong: " + e.getMessage());
     }
 
@@ -42,21 +49,25 @@ public class Ui {
         System.out.println(deletedTask.toType() + deletedTask.markedBox() + deletedTask.toString());
     }
 
-    public static void printMarkTask (int itemToMark, List<Task> storedItems) {
+    public static void printMarkTask(int itemToMark, List<Task> storedItems) {
         System.out.println("Nice! I've marked this task as done:");
         System.out.println(itemToMark + "." + storedItems.get(itemToMark - 1).toType() + storedItems.get(itemToMark - 1).markedBox() + storedItems.get(itemToMark - 1).toString());
     }
 
-    public static void printUnmarkTask (int itemToUnmark, List<Task> storedItems) {
+    public static void printUnmarkTask(int itemToUnmark, List<Task> storedItems) {
         System.out.println("OK, I've marked this task as not done yet:");
         System.out.println(itemToUnmark + "." + storedItems.get(itemToUnmark - 1).toType() + storedItems.get(itemToUnmark - 1).markedBox() + storedItems.get(itemToUnmark - 1).toString());
     }
 
-    public static void outOfRangeError (int item) {
+    public static void outOfRangeError(int item) {
         System.out.println("Task " + item + " has not been created!");
     }
 
     public static void printInvalidCommand() {
         System.out.println("Sorry, I do not understand that command."); //not valid command
+    }
+
+    public static void findArgumentError() {
+        System.out.println("Input item to find!");
     }
 }

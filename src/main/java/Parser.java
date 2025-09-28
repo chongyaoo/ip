@@ -1,5 +1,5 @@
 public class Parser {
-    public String[] parseInput (String line) {
+    public static String[] parseInput (String line) {
         String[] parts = line.split("\\s+", 2);
         String action = parts[0].toLowerCase();
         return parts;
