@@ -146,4 +146,20 @@ public class TaskList {
             return;
         }
     }
+
+    public void handleFind(String[] parts) {
+        if (parts.length == 1) {
+            Ui.findArgumentError();
+            return;
+        }
+        Ui.printFindHeader();
+        int index = 1; //to count task index
+        for (Task t : storedItems) {
+            String taskDescription = t.getDescription();
+            if (taskDescription.contains(parts[1])) {
+                Ui.printIndivTask(t, index);
+            }
+            index++;
+        }
+    }
 }

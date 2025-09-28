@@ -1,6 +1,13 @@
+/**
+ * Deadline Task
+ */
 public class Deadline extends Task {
-    private String date;
 
+    final String date;
+
+    /**
+     * Constructor of a Deadline
+     */
     public Deadline(String data, String date, boolean marked) {
         super(data);
         this.date = date;
