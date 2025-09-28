@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.Scanner;
 
-/** Entry point of chatbot code. */
+/** Entry point of chatbot code. main() parses the command (first word), and calls on the functionalities from other classes.*/
 public class Grizzly {
     public static void main(String[] args) {
         TaskList taskList = new TaskList();

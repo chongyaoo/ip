@@ -3,14 +3,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TaskList manages the List of Tasks, performing functionalities for the Task objects themselves
+ */
 public class TaskList {
+    /**
+     * Dynamic array of Tasks which stores the Tasks that have been added so far
+     */
     static List<Task> storedItems = new ArrayList<>();
+
+    /**
+     * index keeps track of the size of the dynamic array
+     */
     int index = 1;
 
-    public int getIndex() {
-        return index;
-    }
-
+    /**
+     * Deletes a Task from storedItems
+     */
     public void handleDelete(String[] parts) throws IllegalArgumentException {
         int itemToDelete = Parser.parseIndexForDelete(parts);
         if (itemToDelete < index && itemToDelete >= 1) {
@@ -30,6 +39,9 @@ public class TaskList {
         throw new IllegalArgumentException();
     }
 
+    /**
+     * Adds an Event Task to storedItems
+     */
     public void handleEvent(String[] parts) throws IllegalArgumentException {
         if (parts.length <= 1) {
             System.out.println("Description for Event cannot be empty!");
@@ -58,6 +70,9 @@ public class TaskList {
         throw new IllegalArgumentException();
     }
 
+    /**
+     * Adds a Deadline Task to storedItems
+     */
     public void handleDeadline(String[] parts) throws IllegalArgumentException {
         if (parts.length <= 1) {
             System.out.println("Description for Deadline cannot be empty!");
@@ -92,6 +107,9 @@ public class TaskList {
         throw new IllegalArgumentException();
     }
 
+    /**
+     * Adds a ToDo Task to storedItems
+     */
     public void handleToDo(String[] parts) throws IllegalArgumentException {
         if (parts.length <= 1) {
             System.out.println("Description for ToDo cannot be empty!");
@@ -104,8 +122,16 @@ public class TaskList {
         index++;
     }
 
+    /**
+     * Unmarks a Task in storedItems
+     */
     public void handleUnmark(String[] parts) {
-        int itemToUnmark = Parser.parseIndexForUnmark(parts);
+        int itemToUnmark;
+        try {
+            itemToUnmark = Parser.parseIndexForMark(parts);
+        } catch (IllegalArgumentException e) {
+            return;
+        }
         if (itemToUnmark < index && itemToUnmark >= 1) {
             storedItems.get(itemToUnmark - 1).setMarked(false);
             Ui.printUnmarkTask(itemToUnmark, storedItems);
@@ -119,8 +145,16 @@ public class TaskList {
         Ui.outOfRangeError(itemToUnmark);
     }
 
+    /**
+     * Marks a Task in storedItems
+     */
     public void handleMark(String[] parts) {
-        int itemToMark = Parser.parseIndexForMark(parts);
+        int itemToMark;
+        try {
+            itemToMark = Parser.parseIndexForMark(parts);
+        } catch (IllegalArgumentException e) {
+            return;
+        }
         if (itemToMark < index && itemToMark >= 1) {
             storedItems.get(itemToMark - 1).setMarked(true);
             Ui.printMarkTask(itemToMark, storedItems);
@@ -134,19 +168,28 @@ public class TaskList {
         Ui.outOfRangeError(itemToMark);
     }
 
+    /**
+     * Calls Ui to list the Tasks in storedItems
+     */
     public void handleList() {
         Ui.handleList(storedItems, index);
     }
 
+    /**
+     * Load contents in FILE_PATH to storedItems upon initialization
+     */
     public void attemptInitialFileLoad() {
         try {
             index = Storage.recordFileContents(storedItems);
         } catch (FileNotFoundException e) {
-            System.out.println("Textfile not found!");
+            System.out.println("Text file not found!");
             return;
         }
     }
 
+    /**
+     * Finds the Tasks that matches the input description
+     */
     public void handleFind(String[] parts) {
         if (parts.length == 1) {
             Ui.findArgumentError();
@@ -155,7 +198,7 @@ public class TaskList {
         Ui.printFindHeader();
         int index = 1; //to count task index
         for (Task t : storedItems) {
-            String taskDescription = t.getDescription();
+            String taskDescription = t.toString();
             if (taskDescription.contains(parts[1])) {
                 Ui.printIndivTask(t, index);
             }

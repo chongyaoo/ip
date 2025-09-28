@@ -1,9 +1,18 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * Storage deals with writing and reading from the text document in FILE_PATH, which stores the Tasks currently in the list of Tasks
+ */
 public class Storage {
+    /**
+     * File path to the text doc where contents of the Task array are stored
+     */
     private static final String FILE_PATH = "src/main/lines.txt";
 
+    /**
+     * Prints contents of the file in FILE_PATH to the terminal
+     */
     public static void printFileContents() throws FileNotFoundException {
         File f = new File(FILE_PATH); // create a File for the given file path
         Scanner s = new Scanner(f); // create a Scanner using the File as the source
@@ -12,8 +21,12 @@ public class Storage {
             System.out.println(k + "." + s.nextLine());
             k++;
         }
+        return;
     }
 
+    /**
+     * Parses the line read from FILE_PATH into a Task, and returns it
+     */
     public static Task stringtoTask(String line) {
         char taskType = line.charAt(1);
         char marked = line.charAt(4);
@@ -42,6 +55,9 @@ public class Storage {
         return taskToReturn;
     }
 
+    /**
+     * Traverses through FILE_PATH, parsing each line into a Task and adding it into the list
+     */
     public static int recordFileContents(List<Task> storedItems) throws FileNotFoundException {
         File f = new File(FILE_PATH); // create a File for the given file path
         Scanner s = new Scanner(f); // create a Scanner using the File as the source
@@ -53,7 +69,9 @@ public class Storage {
         return k;
     }
 
-
+    /**
+     * Appends a String into a new line in FILE_PATH
+     */
     public static void appendToFile(String textToAppend) throws IOException {
         File f = new File(FILE_PATH);
         FileWriter fw = new FileWriter(FILE_PATH, true); // create a FileWriter in append mode
@@ -66,6 +84,9 @@ public class Storage {
         fw.close();
     }
 
+    /**
+     * Rewrites every Task from the list into FILE_PATH, line by line
+     */
     public static void writeToFile(List<Task> storedItems) throws IOException {
         FileWriter fw = new FileWriter(FILE_PATH);
         for (int i = 0; i < storedItems.size(); i++) {
@@ -74,7 +95,10 @@ public class Storage {
         fw.close();
     }
 
-    public static void attemptAppendToFile (Task task) {
+    /**
+     * Function to catch error before appendToFile
+     */
+    public static void attemptAppendToFile(Task task) {
         try {
             appendToFile(task.toType() + task.markedBox() + task.toString());
         } catch (IOException e) {
@@ -82,7 +106,10 @@ public class Storage {
         }
     }
 
-    public static void attemptPrintFileContents () {
+    /**
+     * Function to catch error before printFileContents
+     */
+    public static void attemptPrintFileContents() {
         try {
             printFileContents();
         } catch (IOException e) {

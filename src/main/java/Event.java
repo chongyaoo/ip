@@ -1,7 +1,14 @@
+/**
+ * Event extends Task
+ */
 public class Event extends Task {
-    private String date;
 
-    public Event (String data, String date, boolean marked) {
+    final String date;
+
+    /**
+     * Constructor of an Event
+     */
+    public Event(String data, String date, boolean marked) {
         super(data);
         this.date = date;
         this.isMarked = marked;
