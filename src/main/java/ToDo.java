@@ -1,11 +1,17 @@
+/**
+ * ToDo extends Task
+ */
 public class ToDo extends Task {
 
+    /**
+     * Constructor for ToDo
+     */
     public ToDo(String data, boolean marked) {
         super(data);
         this.isMarked = marked;
     }
 
-        @Override
+    @Override
     public String toType() {
         return "[T]";
     }

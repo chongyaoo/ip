@@ -1,7 +1,7 @@
+/**
+ * Parses input from the user into 2 parts: the first word which is a command, and a String[] array
+ */
 public class Parser {
-    /**
-     * Parses input from the user into 2 parts: the first word which is a command, and a String[] array
-     */
     public static String[] parseInput (String line) {
         String[] parts = line.split("\\s+", 2);
         String action = parts[0].toLowerCase();
