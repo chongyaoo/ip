@@ -1,14 +1,8 @@
 import java.util.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.io.FileWriter;
-import java.io.IOException;
 
-
+/** Entry point of chatbot code. */
 public class Grizzly {
-    private static final String FILE_PATH = "src/main/lines.txt";
-
     public static void main(String[] args) {
         TaskList taskList = new TaskList();
         Ui.handleGreeting(); //start with greeting

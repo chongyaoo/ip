@@ -1,10 +1,16 @@
 public class Parser {
+    /**
+     * Parses input from the user into 2 parts: the first word which is a command, and a String[] array
+     */
     public static String[] parseInput (String line) {
         String[] parts = line.split("\\s+", 2);
         String action = parts[0].toLowerCase();
         return parts;
     }
 
+    /**
+     * Returns the index of the Task to be deleted
+     */
     public static int parseIndexForDelete (String[] parts) throws IllegalArgumentException{
         int itemToDelete;
         if (parts.length > 2) {
@@ -24,6 +30,9 @@ public class Parser {
         }
     }
 
+    /**
+     * Returns the index of the Task to be unmarked
+     */
     public static int parseIndexForUnmark (String[] parts) throws IllegalArgumentException {
         int itemToUnmark;
         if (parts.length > 2) {
@@ -43,6 +52,9 @@ public class Parser {
         return itemToUnmark;
     }
 
+    /**
+     * Returns the index of the Task to be marked
+     */
     public static int parseIndexForMark(String[] parts) throws IllegalArgumentException {
         int itemToMark;
         if (parts.length > 2) {
@@ -62,6 +74,9 @@ public class Parser {
         return itemToMark;
     }
 
+    /**
+     * Returns the index of the "from" keyword in an Event Task
+     */
     public static int findFromIndex (String[] words1) {
         int fromIndex = -1;
         int j = 0;
@@ -74,6 +89,9 @@ public class Parser {
         return fromIndex;
     }
 
+    /**
+     * Parses a string into an Event Task
+     */
     public static Event getEvent(int fromIndex, String[] words1) {
         StringBuilder eventBuilder = new StringBuilder();
         for (int a = 0; a < fromIndex; a++) {
@@ -92,6 +110,9 @@ public class Parser {
         return new Event(event, from, false);
     }
 
+    /**
+     * Parses a string into a Deadline Task
+     */
     public static Deadline getDeadline(int byIndex, String[] words) {
         StringBuilder eventBuilder = new StringBuilder();
         for (int j = 0; j < byIndex; j++) {
