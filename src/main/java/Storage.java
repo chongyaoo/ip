@@ -1,4 +1,7 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -8,13 +11,28 @@ public class Storage {
     /**
      * File path to the text doc where contents of the Task array are stored
      */
-    private static final String FILE_PATH = "src/main/lines.txt";
+    private static final Path FILE_PATH = Paths.get("data", "lines.txt");
+
+    /**
+     * Handles case where line.txt is not found at the start. Creates the directory and the file before starting.
+     */
+    private static void ensureFile() throws IOException {
+        Files.createDirectories(FILE_PATH.getParent());
+        if (Files.notExists(FILE_PATH)) {
+            Files.createFile(FILE_PATH); // empty file
+        }
+    }
 
     /**
      * Prints contents of the file in FILE_PATH to the terminal
      */
     public static void printFileContents() throws FileNotFoundException {
-        File f = new File(FILE_PATH); // create a File for the given file path
+        try {
+            ensureFile();
+        } catch (IOException e) {
+            Ui.printError(e);
+        }
+        File f = new File(FILE_PATH.toUri()); // create a File for the given file path
         Scanner s = new Scanner(f); // create a Scanner using the File as the source
         int k = 1;
         while (s.hasNext()) {
@@ -59,7 +77,12 @@ public class Storage {
      * Traverses through FILE_PATH, parsing each line into a Task and adding it into the list
      */
     public static int recordFileContents(List<Task> storedItems) throws FileNotFoundException {
-        File f = new File(FILE_PATH); // create a File for the given file path
+        try {
+            ensureFile();
+        } catch (IOException e) {
+            Ui.printError(e);
+        }
+        File f = new File(FILE_PATH.toUri()); // create a File for the given file path
         Scanner s = new Scanner(f); // create a Scanner using the File as the source
         int k = 1;
         while (s.hasNext()) {
@@ -73,8 +96,13 @@ public class Storage {
      * Appends a String into a new line in FILE_PATH
      */
     public static void appendToFile(String textToAppend) throws IOException {
-        File f = new File(FILE_PATH);
-        FileWriter fw = new FileWriter(FILE_PATH, true); // create a FileWriter in append mode
+        try {
+            ensureFile();
+        } catch (IOException e) {
+            Ui.printError(e);
+        }
+        File f = new File(FILE_PATH.toUri());
+        FileWriter fw = new FileWriter(FILE_PATH.toFile(), true); // create a FileWriter in append mode
         if (f.length() == 0) { //checking if the contents is empty
             fw.write(textToAppend);
             fw.close();
@@ -88,7 +116,12 @@ public class Storage {
      * Rewrites every Task from the list into FILE_PATH, line by line
      */
     public static void writeToFile(List<Task> storedItems) throws IOException {
-        FileWriter fw = new FileWriter(FILE_PATH);
+        try {
+            ensureFile();
+        } catch (IOException e) {
+            Ui.printError(e);
+        }
+        FileWriter fw = new FileWriter(FILE_PATH.toFile());
         for (int i = 0; i < storedItems.size(); i++) {
             fw.write((i == 0 ? "" : System.lineSeparator()) + storedItems.get(i).toType() + storedItems.get(i).markedBox() + storedItems.get(i).toString());
         }
