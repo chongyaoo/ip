@@ -2,13 +2,25 @@ Hi, I'm your friendly assistant, Grizzly!
 What can I do for you today?
 ____________________________________________________________
 Got it. I've added this task:
-[E][ ] this
+[D][ ] submitting CS2113 assignment (by: 28th October 2359)
 Now you have 1 tasks in the list
 Got it. I've added this task:
-[T][ ] that by 2pm
+[T][ ] go to the gym
 Now you have 2 tasks in the list
+Got it. I've added this task:
+[E][ ] CS2040C exam (from: 6pm to 8pm)
+Now you have 3 tasks in the list
+Nice! I've marked this task as done:
+2.[T][X] go to the gym
+I've deleted this item from the list:
+[T][X] go to the gym
 Here are the tasks in your list:
-1.[E][ ] this
-2.[T][ ] that by 2pm
-Bye. Hope to see you again soon!
-
+1.[D][ ] submitting CS2113 assignment (by: 28th October 2359)
+2.[E][ ] CS2040C exam (from: 6pm to 8pm)
+Here are the tasks in your list:
+1.[D][ ] submitting CS2113 assignment (by: 28th October 2359)
+2.[E][ ] CS2040C exam (from: 6pm to 8pm)
+1.[D][ ] submitting CS2113 assignment (by: 28th October 2359)
+2.[E][ ] CS2040C exam (from: 6pm to 8pm)
+Here are the matching tasks in your list
+1. [D][ ] submitting CS2113 assignment (by: 28th October 2359)
