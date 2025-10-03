@@ -1,17 +1,29 @@
 /**
- * Parses input from the user into 2 parts: the first word which is a command, and a String[] array
+ * Utility for parsing raw user input into commands and arguments,
+ * and for constructing {@link Task} objects from argument tokens.
  */
 public class Parser {
-    public static String[] parseInput (String line) {
+
+    /**
+     * Splits input into at most two parts: command word and remainder.
+     *
+     * @param line raw user input line
+     * @return 2-element array: [command, args] (args may be missing)
+     */
+    public static String[] parseInput(String line) {
         String[] parts = line.split("\\s+", 2);
         String action = parts[0].toLowerCase();
         return parts;
     }
 
     /**
-     * Returns the index of the Task to be deleted
+     * Parses the index argument for "delete".
+     *
+     * @param parts command arguments
+     * @return int index of the task to delete
+     * @throws IllegalArgumentException if index is missing, or not a valid integer
      */
-    public static int parseIndexForDelete (String[] parts) throws IllegalArgumentException{
+    public static int parseIndexForDelete(String[] parts) throws IllegalArgumentException {
         int itemToDelete;
         if (parts.length > 2) {
             System.out.println("Too many arguments!");
@@ -31,9 +43,13 @@ public class Parser {
     }
 
     /**
-     * Returns the index of the Task to be unmarked
+     * Parses the index argument for "unmark".
+     *
+     * @param parts command arguments
+     * @return int index of the task to unmark
+     * @throws IllegalArgumentException if index is missing, or not a valid integer
      */
-    public static int parseIndexForUnmark (String[] parts) throws IllegalArgumentException {
+    public static int parseIndexForUnmark(String[] parts) throws IllegalArgumentException {
         int itemToUnmark;
         if (parts.length > 2) {
             System.out.println("Too many arguments!");
@@ -53,7 +69,11 @@ public class Parser {
     }
 
     /**
-     * Returns the index of the Task to be marked
+     * Parses the index argument for "mark".
+     *
+     * @param parts command arguments
+     * @return int index of the task to mark
+     * @throws IllegalArgumentException if index is missing, or not a valid integer
      */
     public static int parseIndexForMark(String[] parts) throws IllegalArgumentException {
         int itemToMark;
@@ -75,9 +95,12 @@ public class Parser {
     }
 
     /**
-     * Returns the index of the "from" keyword in an Event Task
+     * Returns the index of the "/from" token in Event command.
+     *
+     * @param words1 input arguments
+     * @return index of "/from", or -1 if not present
      */
-    public static int findFromIndex (String[] words1) {
+    public static int findFromIndex(String[] words1) {
         int fromIndex = -1;
         int j = 0;
         while ((fromIndex == -1) && j < words1.length) {
@@ -90,7 +113,11 @@ public class Parser {
     }
 
     /**
-     * Parses a string into an Event Task
+     * Constructs an {@link Event} from command Event input
+     *
+     * @param fromIndex index of "/from"
+     * @param words1    input arguments
+     * @return new Event task
      */
     public static Event getEvent(int fromIndex, String[] words1) {
         StringBuilder eventBuilder = new StringBuilder();
@@ -111,7 +138,11 @@ public class Parser {
     }
 
     /**
-     * Parses a string into a Deadline Task
+     * Constructs a {@link Deadline} from command Deadline input
+     *
+     * @param byIndex index of "/by"
+     * @param words   input arguments
+     * @return new Deadline task
      */
     public static Deadline getDeadline(int byIndex, String[] words) {
         StringBuilder eventBuilder = new StringBuilder();

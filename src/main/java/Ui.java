@@ -1,12 +1,16 @@
-import java.util.*;
+import java.util.List;
 
 /**
- * Ui class handles printing of outputs and messages to the terminal for the user
+ * Console user-interface helpers for printing messages and task lists.
+ * <p>All methods write to {@code System.out} and take no input.</p>
  */
 public class Ui {
 
     /**
-     * Prints the list of Tasks to the terminal
+     * Prints all tasks with an index and their type/mark prefixes.
+     *
+     * @param storedItems tasks to display
+     * @param index       number of items to print, typically {@code storedItems.size() + 1}
      */
     public static void handleList(List<Task> storedItems, int index) {
         System.out.println("Here are the tasks in your list:");
@@ -37,7 +41,10 @@ public class Ui {
     }
 
     /**
-     * Prints the new Task recently added to the terminal
+     * Prints confirmation for a newly added task and the new list size.
+     *
+     * @param task  the task that was added
+     * @param index the new total count of tasks
      */
     public static void printTask(Task task, int index) {
         System.out.println("Got it. I've added this task:");

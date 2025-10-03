@@ -5,7 +5,7 @@ It also supports saving of Tasks, so that you don't lose track of your saved ite
 
 # Features
 
-## Adding deadlines
+## Adding Deadlines
 
 Deadlines are Tasks that have to be completed before a specified Date/Time.
 
@@ -99,4 +99,12 @@ Example: `find assignment`
 ```
 Here are the matching tasks in your list
 1. [D][ ] submitting CS2113 assignment (by: 28th October 2359)
+```
+
+## Exit Program
+
+Format: `bye`
+
+```
+Bye. Hope to see you again soon!
 ```

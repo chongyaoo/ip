@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TaskList manages the List of Tasks, performing functionalities for the Task objects themselves
+ * Manages the in-memory list of {@link Task} objects and provides
+ * operations to mutate and query them (add, delete, mark, find).
+ *
+ * <p>This class is integrated with {@link Storage} to keep the file synchronized.
  */
 public class TaskList {
     /**
@@ -18,7 +21,10 @@ public class TaskList {
     int index = 1;
 
     /**
-     * Deletes a Task from storedItems
+     * Deletes a task at the given index.
+     *
+     * @param parts command arguments containing the task index
+     * @throws IllegalArgumentException if no valid index is provided
      */
     public void handleDelete(String[] parts) throws IllegalArgumentException {
         int itemToDelete = Parser.parseIndexForDelete(parts);
@@ -40,7 +46,10 @@ public class TaskList {
     }
 
     /**
-     * Adds an Event Task to storedItems
+     * Adds an Event task, validating presence of description and "/from".
+     *
+     * @param parts command arguments
+     * @throws IllegalArgumentException if arguments format is incorrect
      */
     public void handleEvent(String[] parts) throws IllegalArgumentException {
         if (parts.length <= 1) {
@@ -71,7 +80,10 @@ public class TaskList {
     }
 
     /**
-     * Adds a Deadline Task to storedItems
+     * Adds a Deadline task, validating presence of description and "/by".
+     *
+     * @param parts command arguments
+     * @throws IllegalArgumentException if arguments format is incorrect
      */
     public void handleDeadline(String[] parts) throws IllegalArgumentException {
         if (parts.length <= 1) {
@@ -108,7 +120,10 @@ public class TaskList {
     }
 
     /**
-     * Adds a ToDo Task to storedItems
+     * Adds a ToDo task.
+     *
+     * @param parts command arguments
+     * @throws IllegalArgumentException if arguments format is incorrect
      */
     public void handleToDo(String[] parts) throws IllegalArgumentException {
         if (parts.length <= 1) {
@@ -123,7 +138,7 @@ public class TaskList {
     }
 
     /**
-     * Unmarks a Task in storedItems
+     * Marks a task as uncompleted, updating file storage.
      */
     public void handleUnmark(String[] parts) {
         int itemToUnmark;
@@ -146,7 +161,7 @@ public class TaskList {
     }
 
     /**
-     * Marks a Task in storedItems
+     * Marks a task as completed, updating file storage.
      */
     public void handleMark(String[] parts) {
         int itemToMark;
@@ -176,7 +191,7 @@ public class TaskList {
     }
 
     /**
-     * Load contents in FILE_PATH to storedItems upon initialization
+     * Load contents in FILE_PATH to storedItems, upon initialization
      */
     public void attemptInitialFileLoad() {
         try {
@@ -188,7 +203,10 @@ public class TaskList {
     }
 
     /**
-     * Finds the Tasks that matches the input description
+     * Finds tasks whose descriptions contain the search term
+     * and prints them with their indices.
+     *
+     * @param parts command arguments, parts[1] should contain the search keyword
      */
     public void handleFind(String[] parts) {
         if (parts.length == 1) {

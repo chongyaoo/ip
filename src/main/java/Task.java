@@ -1,30 +1,41 @@
 /**
- * Base Class for task types
+ * Base type for all task variants (e.g., {@link ToDo}, {@link Deadline}, {@link Event}).
+ * <p>
+ * A task has a textual description and a completion flag ({@code isMarked}).
+ * Subclasses customize the printed "type" tag, the toString() method, and other variables.
  */
 public class Task {
+
     /**
-     * Description of the Task
+     * Description of the task as shown to the user.
      */
     protected String data;
 
     /**
-     * Boolean tracker of whether the Task is marked
+     * Whether the task is completed (true) or not (false).
      */
     protected boolean isMarked;
 
     /**
-     * Constructor for the base class Task
+     * Constructs a task with the given description, that is initially unmarked.
+     *
+     * @param data non-null task description
      */
     public Task(String data) {
         this.data = data;
         this.isMarked = false;
     }
 
+    /**
+     * Zero-arg constructor for frameworks/tests; leaves fields at defaults.
+     */
     public Task() {
     }
 
     /**
-     * Function to mark the Task
+     * Sets the marked/completion state.
+     *
+     * @param marked {@code true} to mark completed; {@code false} to unmark
      */
     public void setMarked(boolean marked) {
         this.isMarked = marked;
@@ -49,5 +60,3 @@ public class Task {
         return "type";
     }
 }
-
-//Created Level-7-branch: Save function
